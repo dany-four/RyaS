@@ -1,0 +1,26 @@
+#pragma once
+
+//2D vector representation 
+class RYQuad;
+
+struct RYDot{
+    int x = 0;
+    int y = 0;
+    RYDot(int x, int y):x(x),y(y){}
+    RYDot(){}
+    RYDot operator / (const RYDot& OtherDot){
+        return RYDot({x/OtherDot.x,y/OtherDot.y});
+    }
+    RYDot operator - (const RYDot& OtherDot);
+    RYQuad operator < (const RYDot& OtherDot);
+};
+
+//Rectangle representation
+struct RYQuad{
+    RYQuad(RYDot Position, RYDot Area):x(Position.x),y(Position.y),w(Area.x),h(Area.y){}
+    RYQuad(){}
+    int x = 0;
+    int y = 0;
+    int w = 0;
+    int h = 0;
+};
