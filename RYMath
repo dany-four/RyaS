@@ -6,6 +6,3 @@ int RYDeg2Rad(const int Degrees){
 int RYRad2Deg(const i Radians){
     return Radians*(RYPI/180);
 }
-class RYTrigonometry{
-
-}

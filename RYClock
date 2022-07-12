@@ -22,7 +22,7 @@ class RYClock{
     void operator ! ();
 
     void pointA();
-    // give elapsed time since the last call to pointA 
+    // returns elapsed time since the last call to pointA 
     float pointB();
 
     private:

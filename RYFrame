@@ -25,15 +25,9 @@ class RYFrame{
 
     public:
     RYFrame(RYDot TextureSize, RYDot numberOfSprites):sizeLow(TextureSize), sizeHigh(numberOfSprites){
-        //math stuff
         area = sizeLow/sizeHigh;
-
         position.y=0;
-
         frame = position < area; 
-
-        //Debug
-        std::cout << "Visual Area: " << area.x << "x, " << area.y << "y" << std::endl;
     }
 
     void setFrame(int x, int y){
@@ -52,9 +46,6 @@ class RYFrame{
                 position.x = 0;
             else 
                 position.x++;
-
-            //Debug
-            //std::cout << "{" << frame.x << "x, " << frame.y << "y}" << std::endl; 
         }
     }
 };

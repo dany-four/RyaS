@@ -11,19 +11,17 @@ int main(int argc,char *argv[]){
     SDL_Renderer *renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_SOFTWARE);    
     SDL_Event eve;
     bool running = true;
-    SDL_Rect SDLQuadI;
 
-    SDL_Texture *texture = IMG_LoadTexture(renderer,"femboy.png");
+    SDL_Texture *texture = IMG_LoadTexture(renderer,"spritesheet.png");
 
     //RyaS
     int tw,th;
     SDL_QueryTexture(texture,NULL,NULL,&tw,&th);
     RYFrame myFrame(RYDot(tw,th),RYDot(4,4));
     SDL_Rect SDLQuadO = {0,0,myFrame.frame.w*3,myFrame.frame.h*3};
-    SDLQuadI.w = myFrame.frame.w;
-        SDLQuadI.h = myFrame.frame.h;
+    SDL_Rect SDLQuadI = {myFrame.frame.w, myFrame.frame.h};
     RYClock gameCLock;
-    float delta;
+    float deltaTime;
     while (running)
     {
         gameCLock.pointA();
@@ -40,7 +38,7 @@ int main(int argc,char *argv[]){
         }
         //RYFrame
         const Uint8 *key = SDL_GetKeyboardState(NULL);
-                float s = 1;
+                float s = deltaTime*1000;
                 if(key[SDL_SCANCODE_W]){
                     SDLQuadO.y-=s;
                     myFrame.setFrame(0,4);
@@ -64,12 +62,10 @@ int main(int argc,char *argv[]){
         // Draw
         SDLQuadI.x = myFrame.frame.x;
         SDLQuadI.y = myFrame.frame.y;
-        //SDL_SetRenderDrawColor(renderer,255,255,255,255);
-        //SDL_RenderDrawRect(renderer,&SDLQuadO);
         SDL_RenderCopy(renderer,texture,&SDLQuadI,&SDLQuadO);
         // Render
         SDL_RenderPresent(renderer);
-        delta = gameCLock.pointB();
+        deltaTime = gameCLock.pointB();
     }
     
     return 0;

@@ -1,8 +1,6 @@
 #pragma once
 
 //2D vector representation 
-class RYQuad;
-
 struct RYDot{
     int x = 0;
     int y = 0;
