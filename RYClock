@@ -1,7 +1,6 @@
 #pragma once
-//remember
+//note
     //compile RYCLOCK with -D RYCLOCK_EXPORTS
-    //compile program normally
 #ifdef RYCLOCK_EXPORTS
     #define RYCLOCK __declspec(dllexport)
 #else
@@ -14,15 +13,19 @@ using namespace std::chrono;
 class RYClock{
     public:
     RYClock();
-
-    // returns elapsed time in seconds
+    
+    // \returns elapsed time in seconds
     float getTime();
     void reset();
-    bool resetEach(float);
+    /* 
+    \param Seconds When clock should reset
+    \returns True if clock was reset
+    */
+    bool reset(float Seconds);
     void operator ! ();
 
     void pointA();
-    // returns elapsed time since the last call to pointA 
+    // \returns elapsed time since the last call to pointA 
     float pointB();
 
     private:

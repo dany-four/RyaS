@@ -1,8 +1,36 @@
 #pragma once
+#include"RYBase"
+#include<math.h>
+#include<SDL.h>
 #define RYPI 3.141593
-int RYDeg2Rad(const int Degrees){
-    return Degrees*(180/RYPI);
-}
-int RYRad2Deg(const i Radians){
-    return Radians*(RYPI/180);
+namespace RY{
+    float Deg2Rad(const int Degrees){
+        return Degrees*RYPI/180;
+    }
+    float Rad2Deg(const float Radians){
+        return Radians*180/RYPI;
+    }
+    Dot<float> Dots2Vector(Dot<float> Origin, Dot<float> Target)
+    {
+        float theta(atan2(Target.y-Origin.y,Target.x-Origin.x));
+        return Dot(cos(theta),sin(theta));
+    }
+    class Angle{
+        public:
+        int &originX, &originY;
+        int &targetX, &targetY;
+        Angle(int &OriginX, int &OriginY, int &TargetX,int &TargetY)
+        :originX(OriginX),originY(OriginY),targetX(TargetX),targetY(TargetY){}
+        // returns the angle between two dots in degrees
+        Dot<float> vector() const{
+            float theta = Deg2Rad(calculate());
+            return Dot(cos(theta),sin(theta));
+        }
+        float calculate() const{
+            return Rad2Deg(atan2(targetY-originY,targetX-originX));
+        }
+        Dot<float> getOrigin() const{
+            return Dot<float>(originX,originY);
+        }
+    };
 }

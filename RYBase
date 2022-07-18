@@ -1,24 +1,60 @@
 #pragma once
+#include<concepts>
+namespace RY{
 
-//2D vector representation 
-struct RYDot{
-    int x = 0;
-    int y = 0;
-    RYDot(int x, int y):x(x),y(y){}
-    RYDot(){}
-    RYDot operator / (const RYDot& OtherDot){
-        return RYDot({x/OtherDot.x,y/OtherDot.y});
-    }
-    RYDot operator - (const RYDot& OtherDot);
-    RYQuad operator < (const RYDot& OtherDot);
-};
+    template<typename U> concept ARITHMATIC = std::is_arithmetic<U>::value;
+    template<ARITHMATIC Precision> class Quad;
 
-//Rectangle representation
-struct RYQuad{
-    RYQuad(RYDot Position, RYDot Area):x(Position.x),y(Position.y),w(Area.x),h(Area.y){}
-    RYQuad(){}
-    int x = 0;
-    int y = 0;
-    int w = 0;
-    int h = 0;
-};
+    template<ARITHMATIC Precision = int> struct Dot{
+        Precision x = 0;
+        Precision y = 0;
+        Dot(const Precision XY):x(XY), y(XY){}
+        Dot(const Precision X, Precision Y):x(X), y(Y){}
+        Dot(const auto &OtherDot):x(OtherDot.x),y(OtherDot.y){}
+        Dot(){}
+
+        Quad<Precision> operator < (const Dot& OtherDot) const{
+            return Quad(*this, OtherDot);
+        }
+        auto operator - (const auto& OtherDot) const{
+            return Dot<decltype(x - OtherDot.x, y - OtherDot.y)>(x - OtherDot.x, y - OtherDot.y);
+        }
+        Dot<Precision> operator / (const Dot& OtherDot) const{
+            return Dot(x / OtherDot.x, y / OtherDot.y);
+        }
+
+        auto operator * (const ARITHMATIC auto Value) const{
+            return Dot(x * Value, y * Value);
+        }
+
+        auto operator * (const Dot<> &Value) const{
+            return Dot<decltype(x * Value.x + y * Value.y)>
+            (x * Value.x, y * Value.y);
+        }
+
+        void operator += (const Dot& OtherDot){
+            x += OtherDot.x;
+            y += OtherDot.y;
+        }
+        void operator += (Precision Value){
+            x += Value;
+            y += Value;
+        }
+    };
+
+    template<ARITHMATIC Precision = int> struct Quad{
+        Quad(const ARITHMATIC auto X, const ARITHMATIC auto Y, const ARITHMATIC auto W, const ARITHMATIC auto H):x(X),y(Y),w(W),h(H){}
+        Quad(const Dot<auto> &Position, const Dot<auto> &Area):x(Position.x),y(Position.y),w(Area.x),h(Area.y){}
+        Quad(){}
+
+        Dot<Precision> getPosition() const{return Dot(x, y);}
+
+        Dot<Precision> getArea() const{return Dot<Precision>(w, h);}
+
+        Precision x = 0;
+        Precision y = 0;
+        Precision w = 0;
+        Precision h = 0;
+    };
+    
+}

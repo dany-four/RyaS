@@ -1,51 +1,29 @@
 #pragma once
-#include<iostream>
+#ifdef RYFRAME_EXPORTS
+    #define RYFRAME /*__declspec(dllexport)*/
+#else
+    #define RYFRAME /*__declspec(dllimport)*/
+#endif
+#define RYCALL /*__cdecl*/
+
 #include"RYBase"
 #include"RYClock"
-class RYFrame{
-    // Note
-        // sizeHigh starts at 0 but in contructor's parameter it starts at 1
-    private:
-    // LOW
-    RYClock InternalClock; // used for change
-    RYDot sizeLow;// Texture/SpriteSheet size
-    // HIGH
-    RYDot sizeHigh;// Sprites in the sheet
-    RYDot position;// Index of the current sprite
-    RYDot area; // Visible area
-    public:
-    RYQuad frame; // Translated information to properly display sprite 
+namespace RY{
+    class Frame{
+        private:
+        RYClock InternalClock;
+        Dot<> sizeLow;
+        
+        Dot<> sizeHigh;
+        Dot<> position;
+        Dot<> clip; 
+    
+        void updateClip();
 
-    private:
-    // update visible area
-    void translate(){
-        frame.x=position.x*area.x;
-        frame.y=position.y*area.y;
-    }
-
-    public:
-    RYFrame(RYDot TextureSize, RYDot numberOfSprites):sizeLow(TextureSize), sizeHigh(numberOfSprites){
-        area = sizeLow/sizeHigh;
-        position.y=0;
-        frame = position < area; 
-    }
-
-    void setFrame(int x, int y){
-        if(x!=0)
-            position.x = x;
-        if(y!=0)
-            position.y = y-1;
-        animate();
-    }
-
-    void animate(){
-        translate(); 
-        if(InternalClock.resetEach(0.12f))
-        {
-            if(position.x==sizeHigh.x-1)//minus 1 because position should start at 0, 0*area=0
-                position.x = 0;
-            else 
-                position.x++;
-        }
-    }
-};
+        public:
+        Quad<> frame;
+        Frame(Dot<> TextureSize, Dot<> numberOfSprites);
+        void setFrame(unsigned int x, unsigned int y);
+        void animate();
+    };
+}

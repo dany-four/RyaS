@@ -1,0 +1,31 @@
+#pragma once
+#include<vector>
+#include"RYMath"
+namespace RY{
+    class Bullet{
+        public:
+        const Angle &InternalAngle;
+        float vel = 1;
+        float angle = 0;
+
+        Dot<float> vector;
+        Dot<float> position;
+        Dot<float> target;
+
+        Bullet(Angle &angle,float Velocity=1.f):
+        position(Dot<float>(angle.originX,angle.originY)),
+        vector(angle.vector()),
+        vel(Velocity),
+        angle(angle.calculate()),
+        InternalAngle(angle)
+        {}
+        void setTarget(const Dot<float>& newTarget){
+            vector = Dots2Vector(InternalAngle.getOrigin(),newTarget);
+            angle = InternalAngle.calculate();
+        }
+        void update(float deltaTime = 1.f){
+            position+=(vector*vel*deltaTime);
+        }
+    };
+    std::vector<Bullet> Bullets;
+}

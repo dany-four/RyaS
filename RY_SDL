@@ -1,0 +1,23 @@
+#pragma once
+#include<SDL.h>
+#include"RYFrame"
+#include<concepts>
+namespace RY{
+    namespace SDL{
+        SDL_Window *_window;
+        SDL_Renderer *_renderer;
+        void Init(SDL_Window* Window,SDL_Renderer *Renderer){
+            _window = Window;
+            _renderer = Renderer;
+        }
+
+        template <typename Precision=int>SDL_Rect Quad2Rect(const Quad<Precision> &RYQuad){
+            return SDL_Rect({RYQuad.x,RYQuad.y,RYQuad.w,RYQuad.h});
+        }
+
+        void DrawFrame(SDL_Texture *texture, const Quad<> &frame, auto position, float scale = 1.f){
+            SDL_Rect src = Quad2Rect(frame),dst = Quad2Rect(Quad(position, frame.getArea()*scale));
+            SDL_RenderCopy(_renderer,texture,&src,&dst);
+        }
+    }
+}
